@@ -1,0 +1,72 @@
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class QuizApplication {
+    static volatile boolean timeUp = false;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Timer timer = new Timer();
+
+        int score = 0;
+
+        String[] questions = {
+            "1. What is the capital of India?",
+            "2. Which language is used for Android development?",
+            "3. How many days are there in a week?"
+        };
+
+        String[] options = {
+            "A. Mumbai   B. Delhi   C. Chennai",
+            "A. Java      B. HTML     C. CSS",
+            "A. 5         B. 6        C. 7"
+        };
+
+        char[] answers = {'B', 'A', 'C'};
+
+        timer.schedule(new TimerTask() {
+            public void run() {
+                timeUp = true;
+                System.out.println("\nTime is up!");
+            }
+        }, 30000);
+
+        System.out.println("Welcome to Quiz Application!");
+        System.out.println("You have 30 seconds to complete the quiz.");
+        System.out.println();
+
+        for (int i = 0; i < questions.length; i++) {
+            if (timeUp) {
+                break;
+            }
+
+            System.out.println(questions[i]);
+            System.out.println(options[i]);
+            System.out.print("Enter your answer (A/B/C): ");
+
+            String input = sc.nextLine().trim();
+
+            if (timeUp) {
+                break;
+            }
+
+            if (input.length() == 1 &&
+                Character.toUpperCase(input.charAt(0)) == answers[i]) {
+                System.out.println("Correct answer!");
+                score++;
+            } else {
+                System.out.println("Wrong answer!");
+            }
+
+            System.out.println();
+        }
+
+        timer.cancel();
+
+        System.out.println("Quiz Completed!");
+        System.out.println("Your Score: " + score + "/" + questions.length);
+
+        sc.close();
+    }
+}
